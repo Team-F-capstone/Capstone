@@ -4,6 +4,7 @@ import { Route, Routes } from 'react-router-dom';
 import AuthForm from '../features/auth/AuthForm';
 import Home from '../features/home/Home';
 import { clientMe } from './store';
+import ClientRequests from '../features/requests/ClientRequests';
 
 
 /**
@@ -38,6 +39,11 @@ const AppRoutes = () => {
           <Route
             path="/signup"
             element={<AuthForm name="signup" displayName="Sign Up" />}
+          />
+          {/* CLIENT REQUESTS */}
+          <Route
+            path="/:projectId/requests"
+            element={<ClientRequests />}
           />
         </Routes>
       )}
