@@ -37,8 +37,11 @@ router.get("/:projectId", async (req, res, next) => {
 });
 
 
+<<<<<<< Updated upstream
 
 // Update Request Status
+=======
+>>>>>>> Stashed changes
 router.put("/:projectId", async (req, res, next) => {
   console.log("REQ BODY: ", req.body)
   try {
@@ -51,5 +54,8 @@ router.put("/:projectId", async (req, res, next) => {
     next(error);
   }
 });
+<<<<<<< Updated upstream
 
 
+=======
+>>>>>>> Stashed changes
