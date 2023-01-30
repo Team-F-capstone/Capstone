@@ -17,7 +17,7 @@ useEffect(()=>{
 }, [])
 
 const handleAssignUser = (id)=>{
-dispatch(editAssignFreelancer({projectId: projectId, freelancerId: id, status:"Ongoing"})).then(()=>{
+dispatch(editAssignFreelancer({projectId: projectId, freelancerId: id, status:"Ongoing"})).then(()=>{    
   dispatch(editAcceptRequest({projectId: projectId, freelancerId: id, status:"ACCEPTED"}))
 }).then(()=>{
   dispatch(fetchClientRequests(projectId))
