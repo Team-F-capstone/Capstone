@@ -102,6 +102,16 @@ import Avatar from "@mui/material/Avatar";
 import AddCircleOutlinedIcon from "@mui/icons-material/AddCircleOutlined";
 
 
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import Fab from "@mui/material/Fab";
+import Avatar from "@mui/material/Avatar";
+import AddCircleOutlinedIcon from "@mui/icons-material/AddCircleOutlined";
+
+
 const AddRequest = () => {
   const [requestMessage, setRequestMessage] = useState("");
   const [characterError, setCharacterError] = useState(false);
@@ -140,92 +150,36 @@ const AddRequest = () => {
   };
 
   return (
-    <Container component="main">
-      <Box
-        sx={{
-          "& .MuiTextField-root": { m: 1, width: "100ch" },
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-        noValidate
-        autoComplete="off"
-      >
-        <Avatar sx={{ m: 1, bgcolor: "primary.main" }}></Avatar>
-        <AddCircleOutlinedIcon />
-        <div>
-          <Typography component="h1" variant="h3" sx={{ textAlign: "center"}}>Submit a Proposal</Typography>
-          <Typography component="h1" variant="h4"sx={{ bgcolor: "primary" }} >
+    <div>
+        <h1>{error}</h1>
+      <h1>Submit a proposal to work on:</h1>
+      <h2>
+        {project ? (
+          <Link to={`/projects/${project.singleProject.id}`}>
+            {project.singleProject.description}
+          </Link>
+        ) : null}
+      </h2>
+      <h3>
+        posted by:
+        {project.singleProject.id ? (
+          <Link to={`/client-profile/${project.singleProject.client.id}`}>
             {" "}
-            Project:
-            {  project ? (
-              <Link to={`/projects/${project.singleProject.id}`}>
-                <Typography
-                  color="primary"
-                  variant="h4"
-                  sx={{ display: "inline" }}
-                >
-                    {project.singleProject.description}
-                </Typography>
-              </Link>
-            ) : null}
-          </Typography>
-          <Typography variant="h5">
-            posted by:
-            {project.singleProject.id ? (
-              <Link to={`/client-profile/${project.singleProject.client.id}`}>
-                <Typography
-                  color="secondary"
-                  variant="h5"
-                  sx={{ display: "inline",}}
-                >
-                  {" "}
-                  {project.singleProject.client.firstName}{" "}
-                  {project.singleProject.client.lastName}
-                </Typography>
-              </Link>
-            ) : null}
-          </Typography>
-
-          <Box component="form" onSubmit={handleSubmit}>
-            <div>
-              <TextField
-                error={characterError}
-                helperText={
-                  characterError
-                    ? "Character limit exceeded (must be 20 characters or less"
-                    : null
-                }
-                sx={{ backgroundColor: "#f7f4eb" }}
-                id="filled-textarea"
-                label="Write your proposal here"
-                placeholder="Placeholder"
-                multiline
-                variant="filled"
-                name="requestMessage"
-                value={requestMessage}
-                onChange={handleChange}
-              />
-              <Button
-                type="submit"
-                variant="contained"
-                sx={{ mt: 3, mb: 2, height: "60px", fontSize: "1.25rem" }}
-                color="primary"
-              >
-                Submit Proposal
-              </Button>
-
-              {/* <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2, height: "60px", fontSize: "1.25rem" }}
-            color="primary"
-          >
-            Submit Proposal
-          </Button> */}
-            </div>
-          </Box>
+            {project.singleProject.client.firstName}{" "}
+            {project.singleProject.client.lastName}
+          </Link>
+        ) : null}
+      </h3>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <textarea
+            style={{ width: 800, height: 200 }}
+            type="textarea"
+            name="requestMessage"
+            value={requestMessage}
+            onChange={(e) => setRequestMessage(e.target.value)}
+          />
+          <button type="submit">Submit Proposal</button>
         </div>
       </Box>
     </Container>
