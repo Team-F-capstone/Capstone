@@ -39,7 +39,7 @@ const handleSearch = () =>{
         {freelancers.map((freelancers) => (
           <div className='card'>
             <Link to={`/freelancers/${freelancers.id}`}>
-          <Card sx={{ maxWidth: 345 }}>
+          <Card className='freelancerCard' sx={{ maxWidth: 345 }}>
           <CardMedia
             sx={{ height: 140 }}
             image={freelancers.imageUrl}

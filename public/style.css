@@ -111,11 +111,12 @@ li{
   gap: 1rem;
   margin: 1rem;
   width: 15vw;
-  height: 80vh;
+  height: 70vh;
   overflow: auto;
   box-shadow: 1px 3px 3px 1px;
   background-color: white;
   padding: 1rem;
+  border-radius: 1rem;
 }
 
 
@@ -178,6 +179,12 @@ li{
   background: transparent;
 }
 
+.searchBar{
+  border: none;
+  outline: none;
+  text-align: center;
+}
+
 #search-bar::placeholder {
   color: black;
   padding-left: 10px;
@@ -236,4 +243,7 @@ li{
 }
 
 
-
+.freelancerCard{
+  width: 15vw;
+  height: 28vh;
+}

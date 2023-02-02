@@ -11,6 +11,7 @@ const AllMessages = () => {
   const freelancerIsLoggedIn = useSelector((state) => !!state.freelancerAuth.me.id);
   const [clientNew, setClientNew] = useState(false)
   const [freelancerNew, setFreelancerNew] = useState(false)
+  const [render, setRender] = useState(false)
   const client = useSelector((state) => state.clientAuth.clientMe);
   const clientId = useSelector((state) => state.clientAuth.clientMe.id);
   const freelancerId = useSelector((state) => state.freelancerAuth.me.id);
@@ -36,12 +37,11 @@ const AllMessages = () => {
       }
     }
 
-    messages.map((msg) => {
-      if(!msg.read && msg.from != client.username && !clientNew){
-        setClientNew(true)
-      }
-    })
-  
+ 
+    
+    
+
+
     const clickMessageClient = (freelancerId) => {
       navigate(`/messages/${freelancerId}`)
     }
@@ -49,6 +49,18 @@ const AllMessages = () => {
     useEffect(() => {
       dispatch(fetchClientMessagesAsync(clientId))    
     }, [dispatch])
+
+    useEffect(() => {
+      if(messages){
+        messages.map((msg) => {
+          if(!msg.read && msg.from != client.username && !clientNew){
+            setClientNew(true)
+          }
+        })
+      }
+    }, [messages])
+    
+   
 
     
 
@@ -58,7 +70,7 @@ const AllMessages = () => {
       {newMsgs ? newMsgs.map((message) => {
         return(
           <>
-            <button className='messageLink' variant='outlined' onClick={() => clickMessageClient(message.freelancerId)} >{message.from}</button>
+            <button className='messageLink' variant='outlined' onClick={() => clickMessageClient(message.freelancerId)} >{message.from}</button>  
           </>
         )
       }) : null}
