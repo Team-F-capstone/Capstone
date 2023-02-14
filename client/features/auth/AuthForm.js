@@ -41,8 +41,8 @@ const AuthForm = ({ name, displayName }) => {
     await dispatch(freelancerAuthenticate({username, password, method: formName})).then(() => setErr(true))
     }
     if(err && !errMessage){
-      navigate('/')
-    }else{
+      navigate('/projects/client/client:id')
+    }else if(!err){
       setErrMessage('Incorrect username/password')
     }
     // navigate('/projects/client/client:id')
