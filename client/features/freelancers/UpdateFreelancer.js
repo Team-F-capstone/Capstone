@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { fetchSingleFreelancer, selectSingleFreelancer, updateFreelancerAsync } from "./singleFreelancerSlice";
-// import { updateFreelancerAsync } from "./singleFreelancerSlice";
+import {
+  fetchSingleFreelancer,
+  selectSingleFreelancer,
+  updateFreelancerAsync,
+} from "./singleFreelancerSlice";
+import ImageUpload from "../imageUpload/ImageUpload";
+
 
 // MATERIAL UI
 import Avatar from "@mui/material/Avatar";
@@ -13,76 +18,116 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import InputLabel from '@mui/material/InputLabel';
+import InputAdornment from '@mui/material/InputAdornment';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import { Menu } from "@mui/material";
 ////////////////
+
+const categories = ['Python Developer', 
+'Javascript Developer',
+'HTML & CSS Developer',
+'Android Developer',
+'iOS Developer'
+]
+
+const specialtiesList =['Web Application, Scripting, Bug Fixes, Help/Consultation', 
+'Custom Websites using WordPress, Shopify, Wix, etc.',
+'Mobile Apps, Desktop Applications, Game Development',
+'Website Development, Maitaince, and Customization',
+]
 
 const UpdateFreelancer = () => {
   const dispatch = useDispatch();
-  const id = useSelector((state) => state.freelancerAuth.me.id)
-  const freelancer = useSelector(selectSingleFreelancer)
-  const navigate = useNavigate()
+  const id = useSelector((state) => state.freelancerAuth.me.id);
+  const freelancer = useSelector(selectSingleFreelancer);
+  const navigate = useNavigate();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [description, setDescription] = useState("");
-  const [username, setUsername] = useState('')
-  const [categories, setCategories] = useState('')
-  const [imageUrl, setImageUrl] = useState('')
+  const [username, setUsername] = useState("");
+  const [category, setCategory] = useState('');
+  const [specialties, setSpecialties] = useState('');
+  const [hourlyRate, setHourlyRate] = useState("")
+  // const [bio, setBio] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+
 
 
   const handleSubmit = async (evt) => {
     evt.preventDefault();
-    await dispatch(updateFreelancerAsync({id: freelancer.id, firstName, lastName, email, description, username, categories, imageUrl }))
-    .then(() => dispatch(fetchSingleFreelancer(id)));
-    navigate('/profile')
-  }
+    await dispatch(
+      updateFreelancerAsync({
+        id: freelancer.id,
+        firstName,
+        lastName,
+        email,
+        description,
+        hourlyRate,
+        username,
+        category,
+        specialties
+      })
+    ).then(() => dispatch(fetchSingleFreelancer(id)));
+    navigate("/profile");
+    window.location.reload()
+  };
 
   useEffect(() => {
     const getFreelancer = async () => {
-      await dispatch(fetchSingleFreelancer(id))
-    }
-    getFreelancer()
-    setFirstName(freelancer.firstName)
-    setLastName(freelancer.lastName)
-    setEmail(freelancer.email)
-    setDescription(freelancer.description)
-    setUsername(freelancer.username)
-    setCategories(freelancer.categories)
-    setImageUrl(freelancer.imageUrl)
-  }, [])
+      await dispatch(fetchSingleFreelancer(id));
+    };
+    getFreelancer();
+    setFirstName(freelancer.firstName);
+    setLastName(freelancer.lastName);
+    setEmail(freelancer.email);
+    setDescription(freelancer.description);
+    setUsername(freelancer.username);
+    setHourlyRate(freelancer.hourlyRate);
+    setCategory(freelancer.category);
+    setSpecialties(freelancer.specialties);
+  }, []);
+
+  ////CharacterLimit//////
+  const CHARACTER_LIMIT = 70;
+
+  const handleChange = bio => event => {
+    setValues({ ...bio, [bio]: event.target.value });
+  };
+  //////////////
 
   return (
-
-<Container component="main" maxWidth="sm">
+    <Container component="main" maxWidth="sm">
       <Box
         sx={{
-          marginTop: 3,
+          marginTop: 2,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          backgroundColor: "#F5F5F5",
+          padding: "1em 1em",
+          borderRadius: "4px",
+          display: 'flex', flexWrap: 'wrap',
+          
         }}
       >
         <Avatar sx={{ m: 1, bgcolor: "primary.main" }}>
           <LockOutlinedIcon />
         </Avatar>
-        <Typography component="h1" variant="h4">
+        <Typography color='primary' component="h1" variant="h4">
           UPDATE YOUR INFORMATION
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 3 }}>
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            label="username"
-            autoComplete="description"
-            value={username}
-            name="username"
-            onChange={(e) => setUsername(e.target.value)}
-          />
+        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 3,
+        }}>
+         
 
           <TextField
             margin="normal"
             required
-            fullWidth
+            sx={{ m: 1, width: '25ch' }}
             autoComplete="firstName"
             label="firstName"
             value={firstName}
@@ -93,13 +138,39 @@ const UpdateFreelancer = () => {
           <TextField
             margin="normal"
             required
-            fullWidth
+            sx={{ m: 1, width: '25ch' }}
             autoComplete="lastName"
             label="lastName"
             value={lastName}
             name="lastName"
             onChange={(e) => setLastName(e.target.value)}
+          /> 
+          <TextField
+            margin="normal"
+            required
+            sx={{ m: 1, width: '25ch' }}
+            label="username"
+            autoComplete="description"
+            value={username}
+            name="username"
+            onChange={(e) => setUsername(e.target.value)}
           />
+
+<TextField
+            margin="normal"
+            required
+            sx={{ m: 1, width: '25ch' }}
+            type="number"
+            autoComplete="hourlyRate"
+            label="hourlyRate"
+            value={hourlyRate}
+            name="hourlyRate"
+            InputProps={{
+              startAdornment: <InputAdornment position="start">$</InputAdornment>,
+            }}
+            onChange={(e) => setHourlyRate(e.target.value)}
+          />
+
 
           <TextField
             margin="normal"
@@ -111,6 +182,47 @@ const UpdateFreelancer = () => {
             name="email"
             onChange={(e) => setEmail(e.target.value)}
           />
+
+
+        
+
+          {/* category  */}
+          <InputLabel >Category</InputLabel>
+          <Select name='category'
+          fullWidth
+          label="Category"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          >
+            <MenuItem value=""><em>select</em></MenuItem>
+            {categories && categories.length
+                        ? categories.map((category) => (
+                            <MenuItem key={category} value={category}>
+                              {category}
+                            </MenuItem>
+                          ))
+                        : null}
+          </Select>
+          
+          {/* specialties */}
+          <InputLabel >Specialties</InputLabel>
+          <Select 
+          name='specialties'
+          label="Specialties"
+          value={specialties}
+          fullWidth
+          onChange={(e) => setSpecialties(e.target.value)}
+          >
+            <MenuItem value=""><em>select</em></MenuItem>
+            {specialtiesList && specialtiesList.length
+                        ? specialtiesList.map((specialties) => (
+                            <MenuItem key={specialties} value={specialties}>
+                              {specialties}
+                            </MenuItem>
+                          ))
+                        : null}
+          </Select>
+
 
           <TextField
             margin="normal"
@@ -124,29 +236,6 @@ const UpdateFreelancer = () => {
             name="description"
             onChange={(e) => setDescription(e.target.value)}
           />
-
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            autoComplete="categories"
-            label="categories"
-            value={categories}
-            name="categories"
-            onChange={(e) => setCategories(e.target.value)}
-          />
-
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            autoComplete="image"
-            label="imageUrl"
-            value={imageUrl}
-            name="image"
-            onChange={(e) => setImageUrl(e.target.value)}
-          />
-
           <Button
             type="submit"
             fullWidth
@@ -157,69 +246,9 @@ const UpdateFreelancer = () => {
             Update
           </Button>
         </Box>
+        <ImageUpload />
       </Box>
     </Container>
-
-
-
-    // <form 
-    // onSubmit={handleSubmit}
-    // >
-    //     <h1>Update your information</h1>
-
-    //   <label>Username:</label>
-    //   <input 
-    //   name="username"
-    //   value={username}
-    //   onChange={(e) => setUsername(e.target.value)}
-    //   />
-
-    //   <label >Name:</label>
-    //   <input
-    //     name="name"
-    //     value={firstName}
-    //     onChange={(e) => setFirstName(e.target.value)}
-    //   />
-
-    //   <label>Last name:</label>
-    //   <input
-    //     name="lastname"
-    //     value={lastName}
-    //     onChange={(e) => setLastName(e.target.value)}
-    //   />
-     
-     
-    //   <label>Email:</label>
-    //   <input
-    //     name="email"
-    //     value={email}
-    //     onChange={(e) => setEmail(e.target.value)}
-    //   />
-      
-      
-    //   <label>Description:</label>
-    //   <input
-    //     name="description"
-    //     value={description}
-    //     onChange={(e) => setDescription(e.target.value)}
-    //   />
-
-    //   <label>Categories:</label>
-    //   <input 
-    //   name='categories'
-    //   value={categories}
-    //   onChange={(e) => setCategories(e.target.value)}
-    //   />
-
-    //   <label>Profile Image:</label>
-    //   <input 
-    //   name="image"
-    //   value={imageUrl}
-    //   onChange={(e) => setImageUrl(e.target.value)}
-    //   />
-
-    //   <button type="submit">Edit</button>
-    // </form>
   );
 };
 

@@ -2,7 +2,7 @@ const router = require("express").Router();
 module.exports = router;
 
 const {
-  models: { Project, Client },
+  models: { Project, Client, Freelancer, Request },
 } = require("../db");
 
 // All projects route
@@ -28,8 +28,9 @@ router.get("/cat/:category", async (req, res, next) => {
 
 // All projects for individual client route
 router.get("/client/:clientId", async (req, res, next) => {
+
     try {
-      const projects = await Project.findAll({ where: {clientId: req.params.clientId}});
+      const projects = await Project.findAll({ where: {clientId: req.params.clientId}, include: Request});
       res.send(projects);
     } catch (error) {
       console.log("Error in all projects route");
@@ -51,7 +52,7 @@ router.get("/client/:clientId", async (req, res, next) => {
 // Single project route
 router.get("/:projectId", async (req, res, next) => {
   try {
-    const project = await Project.findByPk(req.params.projectId, {include: Client});
+    const project = await Project.findByPk(req.params.projectId, {include: [Client, Freelancer]});
     res.send(project);
   } catch (error) {
     console.log("error in single product route");

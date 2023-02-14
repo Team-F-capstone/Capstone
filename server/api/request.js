@@ -8,7 +8,7 @@ module.exports = router
 router.get('/', async (req, res, next) => {
   console.log("HELLO")
     try{
-        const requests = await Request.findAll();
+        const requests = await Request.findAll({include: [Freelancer, Project]});
         res.send(requests)
     }catch(err) {
         next(err)
@@ -39,7 +39,7 @@ router.get("/product/:projectId/", async (req, res, next) => {
 
 // GET REQUESTS BY FREELANCERID
 router.get("/freelancer/:freelancerId", async (req, res, next) => {
-  console.log("HOLA: ")
+
   try {
       const request = await Request.findAll({where: {freelancerId : req.params.freelancerId}, include: [Freelancer, Project]});
     // const request = await Request.findAll({where: {projectId : req.params.projectId, status: 'PENDING'}, include: Freelancer});
@@ -54,14 +54,30 @@ router.get("/freelancer/:freelancerId", async (req, res, next) => {
 // Update Request Status
 router.put("/:projectId", async (req, res, next) => {
   console.log("REQ BODY: ", req.body)
+  console.log("REQ PARASM: ", req.params.projectId)
   try {
     const request = await Request.findAll({where: {projectId : req.params.projectId, freelancerId: req.body.freelancerId}});
+    console.log("REQUEST: ", request)
     res.send(await request[0].update(req.body));
   } catch (error) {
     console.log("Error in update project route");
     next(error);
   }
 });
+
+// Update Request Status
+router.put("/request/:requestId", async (req, res, next) => {
+  console.log("REQ BODY: ", req.body)
+  try {
+    const request = await Request.findAll({where: {projectId : req.params.projectId, freelancerId: req.body.freelancerId}});
+    console.log("REQUEST: ", request)
+    res.send(await request[0].update(req.body));
+  } catch (error) {
+    console.log("Error in update project route");
+    next(error);
+  }
+});
+
 
 
 
@@ -77,6 +93,19 @@ res.send(request)
 }
 
 })
+// GET SINGLE FREELANCER BY PROJECTID AND FREELANCERID
+router.get("/:projectId/:freelancerId", async (req, res, next) => {
+  console.log("HIT MY ROUTE: ", req.params.projectId )
+  console.log("PARAMS: ", req.params.projectId,req.params.freelancerId )
+  try {
+    const request = await Request.findAll({where: {projectId : req.params.projectId, freelancerId: req.params.freelancerId}})
+    console.log("REQUESTccccL ", request)
+    res.send( request);
+  } catch (error) {
+    console.log("Error in delete request route");
+    next(error);
+  }
+});
 
 router.delete("/:projectId/:freelancerId", async (req, res, next) => {
   // console.log("DELETE REQUES Route", req.body)

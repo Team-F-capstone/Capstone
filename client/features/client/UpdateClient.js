@@ -12,6 +12,7 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import ImageUploadClient from "../imageUpload/ImageUploadClient";
 ////////////
 
 const UpdateClient = () => {
@@ -32,6 +33,7 @@ const UpdateClient = () => {
     await dispatch(updateClientAsync({id: client.id, firstName, lastName, email, description, username, imageUrl }))
     .then(() => dispatch(fetchClient(id)));  
     navigate('/profile')
+    window.location.reload()
   }
 
   useEffect(() => {
@@ -44,23 +46,26 @@ const UpdateClient = () => {
     setEmail(client.email)
     setDescription(client.description)
     setUsername(client.username)
-    setImageUrl(client.imageUrl)
+    
   }, [])
 
   return (
     <Container component="main" maxWidth="sm">
     <Box
       sx={{
-        marginTop: 3,
+        marginTop: 2,
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
+        // backgroundColor:"#F5F5F5",
+        padding:"1em 1em",
+        borderRadius: "4px"
       }}
     >
       <Avatar sx={{ m: 1, bgcolor: "primary.main" }}>
         <LockOutlinedIcon />
       </Avatar>
-      <Typography component="h1" variant="h4">
+      <Typography color='primary' component="h1" variant="h4">
         UPDATE YOUR INFORMATION
       </Typography>
       <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 3 }}>
@@ -121,17 +126,6 @@ const UpdateClient = () => {
           onChange={(e) => setDescription(e.target.value)}
         />
 
-        <TextField
-          margin="normal"
-          required
-          fullWidth
-          autoComplete="image"
-          label="imageUrl"
-          value={imageUrl}
-          name="image"
-          onChange={(e) => setImageUrl(e.target.value)}
-        />
-
         <Button
           type="submit"
           fullWidth
@@ -142,59 +136,9 @@ const UpdateClient = () => {
           Update
         </Button>
       </Box>
+      <ImageUploadClient />
     </Box>
   </Container>
-    // <form 
-    // onSubmit={handleSubmit}
-    // >
-    //     <h1>Update your information</h1>
-
-    //   <label>Username:</label>
-    //   <input 
-    //   name="username"
-    //   value={username}
-    //   onChange={(e) => setUsername(e.target.value)}
-    //   />
-
-    //   <label >First Name:</label>
-    //   <input
-    //     name="fisrtName"
-    //     value={firstName}
-    //     onChange={(e) => setFirstName(e.target.value)}
-    //   />
-
-    //   <label>Last name:</label>
-    //   <input
-    //     name="lastname"
-    //     value={lastName}
-    //     onChange={(e) => setLastName(e.target.value)}
-    //   />
-     
-     
-    //   <label>Email:</label>
-    //   <input
-    //     name="email"
-    //     value={email}
-    //     onChange={(e) => setEmail(e.target.value)}
-    //   />
-      
-      
-    //   <label>Description:</label>
-    //   <input
-    //     name="description"
-    //     value={description}
-    //     onChange={(e) => setDescription(e.target.value)}
-    //   />
-
-    //   <label>Profile Image:</label>
-    //   <input 
-    //   name="image"
-    //   value={imageUrl}
-    //   onChange={(e) => setImageUrl(e.target.value)}
-    //   />
-
-    //   <button type="submit">Edit</button>
-    // </form>
   );
 };
 

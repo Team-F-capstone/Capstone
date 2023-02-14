@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { fetchSingleProjectAsync, editSingleProject } from "./singleProjectSlice";
 
 
@@ -23,8 +24,11 @@ const statuses = ["Pending", "Ongoing", "Complete"];
 
 const EditProject = (props) => {
   const [status, setStatus] = useState("");
+  const [title, setTitle] = useState("")
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
+
+  const navigate = useNavigate()
 
   const freelancer = useSelector((state) => state.freelancerAuth.me.id)
 
@@ -39,20 +43,38 @@ const EditProject = (props) => {
   
   useEffect(() => {
     dispatch(fetchSingleProjectAsync(projectId)).then((res) => {
-      const {status, description, category } = res.payload;
+      const {status, title, description, category } = res.payload;
 
       setStatus(status);
+      setTitle(title)
       setDescription(description);
       setCategory(category);
     });
   }, [dispatch]);
 
+  ////CharacterLimit//////
+  const CHARACTER_LIMIT = 30;
+
+  const handleChange = title=> event => {
+    setValues({ ...title, [title]: event.target.value });
+  };
+  //////////////
+  const categories = ['Python Developer', 
+'Javascript Developer',
+'HTML & CSS Developer',
+'Android Developer',
+'iOS Developer'
+]
+
   const handleEditProject = (e) => {
     e.preventDefault();
     dispatch(
-      editSingleProject({ id, status, description, category })
+      editSingleProject({ id, title, status, description, category })
     ).then(() => {
       dispatch(fetchSingleProjectAsync(projectId));
+    }).then(()=>{
+      navigate(`/projects/${id}`)
+      window.location.reload()
     });
   };
 
@@ -68,6 +90,10 @@ const EditProject = (props) => {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
+            backgroundColor:"#F5F5F5",
+            padding:"1em 1em",
+            borderRadius: "4px",
+            boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2)"
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: "primary.main" }}>
@@ -122,19 +148,23 @@ const EditProject = (props) => {
     {/* Clients can edit project */}
     {client === projectClientId ? (
       <Container component="main" maxWidth="sm">
-        <CssBaseline />
+        
         <Box
           sx={{
-            marginTop: 8,
+            marginTop: 3,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
+            backgroundColor:"#F5F5F5",
+            padding:"1em 1em",
+            borderRadius: "4px",
+            boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2)"
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: "primary.main" }}>
             <AddCircleOutlinedIcon />
           </Avatar>
-          <Typography component="h1" variant="h4">
+          <Typography color='primary' component="h1" variant="h4">
             Edit Project
           </Typography>
           <Box
@@ -144,28 +174,50 @@ const EditProject = (props) => {
             sx={{ mt: 3 }}
           >
             <TextField
-              margin="normal"
-              required
-              fullWidth
-              multiline
-              rows={4}
-              label="description"
-              autoComplete="description"
-              value={description}
-              name="description"
-              onChange={(e) => setDescription(e.target.value)}
-            />
+            margin="normal"
+            required
+            fullWidth
+            autoComplete="title"
+            label="title"
+            value={title}
+            name="title"
+            inputProps={{
+              maxLength: CHARACTER_LIMIT
+            }}
+            helperText={`${title.length}/${CHARACTER_LIMIT}`}
+            onChange={(e) => setTitle(e.target.value) && handleChange(title)}
+          /> 
 
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              autoComplete="category"
-              label="category"
-              value={category}
-              name="category"
-              onChange={(e) => setCategory(e.target.value)}
-            />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            multiline
+            rows={4}
+            label="description"
+            autoComplete="description"
+            value={description}
+            name="description"
+            onChange={(e) => setDescription(e.target.value)}
+          />
+
+           {/* category  */}
+           <InputLabel >Category</InputLabel>
+          <Select name='category'
+          fullWidth
+          label="Category"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          >
+            <MenuItem value=""><em>select</em></MenuItem>
+            {categories && categories.length
+                        ? categories.map((category) => (
+                            <MenuItem key={category} value={category}>
+                              {category}
+                            </MenuItem>
+                          ))
+                        : null}
+          </Select>
 
             <Button
               type="submit"

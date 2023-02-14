@@ -14,12 +14,26 @@ import Box from "@mui/material/Box";
 import AddCircleOutlinedIcon from "@mui/icons-material/AddCircleOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import InputLabel from "@mui/material/InputLabel";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
 ////////////////
+
+
+const categories = ['Python Developer', 
+'Javascript Developer',
+'HTML & CSS Developer',
+'Android Developer',
+'iOS Developer'
+]
+
+
 
 const AddProject = () => {
   
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
+  const [title, setTitle] = useState('')
 
   const clientId = useSelector((state) => state.clientAuth.clientMe.id)
 
@@ -30,31 +44,45 @@ const AddProject = () => {
   
   const handleAddProject = (e) => {
     e.preventDefault();
-    dispatch(addProjectAsync({ clientId, description, category }))
+    dispatch(addProjectAsync({ clientId, title, description, category }))
     .then(()=> navigate("/projects/client/:clientId"))
   };
+
 
   const onChange = (e) => {
     const value = e.target.value;
     const nameInput = e.target.name;
     if (nameInput === "description") setDescription(value);
     if (nameInput === "category") setCategory(value);
+    // if (nameInput === "title") setTitle(value)
   };
+
+   ////CharacterLimit//////
+   const CHARACTER_LIMIT = 30;
+
+   const handleChange = title=> event => {
+     setValues({ ...title, [title]: event.target.value });
+   };
+   //////////////
   
   return (
 <Container component="main" maxWidth="sm">
       <Box
         sx={{
-          marginTop: 8,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
+        marginTop: 3,
+        marginBottom: 3,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        backgroundColor:"#F5F5F5",
+        padding:"1em 1em",
+        borderRadius: "4px"
         }}
       >
         <Avatar sx={{ m: 1, bgcolor: "primary.main" }}>
           <AddCircleOutlinedIcon />
         </Avatar>
-        <Typography component="h1" variant="h4">
+        <Typography color='primary' component="h1" variant="h4">
           Add Project
         </Typography>
         <Box
@@ -63,6 +91,21 @@ const AddProject = () => {
           noValidate
           sx={{ mt: 3 }}
         >
+
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            autoComplete="title"
+            label="title"
+            value={title}
+            name="title"
+            inputProps={{
+              maxLength: CHARACTER_LIMIT
+            }}
+            helperText={`${title.length}/${CHARACTER_LIMIT}`}
+            onChange={(e) => setTitle(e.target.value) && handleChange(title)}
+          /> 
           <TextField
             margin="normal"
             required
@@ -76,16 +119,23 @@ const AddProject = () => {
             onChange={onChange}
           />
 
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            autoComplete="category"
-            label="category"
-            value={category}
-            name="category"
-            onChange={onChange}
-          />
+           {/* category  */}
+           <InputLabel >Category</InputLabel>
+          <Select name='category'
+          fullWidth
+          label="Category"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          >
+            <MenuItem value=""><em>select</em></MenuItem>
+            {categories && categories.length
+                        ? categories.map((category) => (
+                            <MenuItem key={category} value={category}>
+                              {category}
+                            </MenuItem>
+                          ))
+                        : null}
+          </Select>
 
           <Button
             type="submit"
@@ -100,23 +150,6 @@ const AddProject = () => {
       </Box>
     </Container>
 
-    // <div id="addProject">
-    //   <form onSubmit={handleAddProject}>
-    //     <label htmlFor="description">Description:</label>
-    //     <input
-    //       name="description"
-    //       value={description}
-    //       onChange={(e) => setDescription(e.target.value)}
-    //     />
-    //     <label htmlFor="category">Category:</label>
-    //     <input
-    //       name="category"
-    //       value={category}
-    //       onChange={(e) => setCategory(e.target.value)}
-    //     />
-    //     <button type="submit">Post Project</button>
-    //   </form>
-    // </div>
   );
 };
 

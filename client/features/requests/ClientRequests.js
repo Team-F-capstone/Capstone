@@ -5,7 +5,7 @@ import {
   selectClientRequests,
   editAcceptRequest,
 } from "./clientRequestSlice";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { editAssignFreelancer } from "../projects/singleProjectSlice";
 
 import { selectSingleProject } from "../projects/singleProjectSlice";
@@ -17,24 +17,33 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import Switch from '@mui/material/Switch';
+import Checkbox from '@mui/material/Checkbox';
+import PendingTwoToneIcon from '@mui/icons-material/PendingTwoTone';
 
 export default function ClientRequests(props) {
-  const [error, setError] = useState("");
 
+const navigate = useNavigate()
   const dispatch = useDispatch();
   const requests = useSelector(selectClientRequests);
   const { projectId } = useParams();
 
-  const project = useSelector(selectSingleProject);
+  const projectStatus = useSelector((state)=> state.singleProject.singleProject.status)
+  // console.log("LOGGO PROJECTO: ", project)
 
   useEffect(() => {
-    dispatch(fetchClientRequests(projectId)).then(() => {
-      dispatch(fetchSingleProjectAsync(projectId));
-    });
+    dispatch(fetchClientRequests(projectId)).then(()=>{
+      requests.map((request)=>{
+        dispatch(editAcceptRequest({projectId: request.projectId, seenClient: !!request.seenClient, freelancerId: request.freelancerId})).then(()=>{
+          dispatch(fetchClientRequests(projectId))
+        })
+        
+      })
+    })
+
   }, [dispatch]);
 
   const handleAssignUser = (id) => {
-    project.singleProject.freelancerId === null ?
     dispatch(
       editAssignFreelancer({
         projectId: projectId,
@@ -52,9 +61,9 @@ export default function ClientRequests(props) {
           })
         )
       })
-      .then(() => {
+      .then(async () => {
         
-        dispatch(
+       await dispatch(
           editAcceptRequest({
             projectId: projectId,
             freelancerId: id,
@@ -63,16 +72,16 @@ export default function ClientRequests(props) {
         )
       })
       .then(() => {
-        dispatch(fetchClientRequests(projectId));
-         
-      }).then(()=>{
-        setError("")
+          dispatch(fetchClientRequests(projectId)).then(()=>{
+            // navigate(`/projects/${projectId}`)
+            window.location.reload()
+          });
+      navigate(`/projects/${projectId}`)
       })
-      : setError("You already have a freelancer assigned to this project. You can only assign one freelnacer per project. Please unassign the current freelancer before adding a new one.")
+
   };
-  const handleUnassignUser = (id) => {
-    //  id === project.singleProject.freelancerId ?
-    dispatch(
+  const handleUnassignUser = async (id) => {
+    await dispatch(
       editAssignFreelancer({
         projectId: projectId,
         freelancerId: null,
@@ -88,9 +97,9 @@ export default function ClientRequests(props) {
           })
         );
       })
-      .then(() => {
+      .then( async () => {
         dispatch(
-          editAcceptRequest({
+         await  editAcceptRequest({
             projectId: projectId,
             freelancerId: id,
             status: "PENDING",
@@ -98,46 +107,64 @@ export default function ClientRequests(props) {
         );
       })
       .then(() => {
-        dispatch(fetchClientRequests(projectId));
-      }).then(()=>{
-        setError("")
+         dispatch(fetchClientRequests(projectId));
       })
-    //  : setError("Freelancer is not assigned to project")
   };
+const handleRead = async (projectId, seenClient, freelancerId)=>{
+  console.log("SEEN CLIENT: ", !seenClient)
+    await dispatch(editAcceptRequest({projectId: projectId, seenClient: !seenClient, freelancerId: freelancerId})).then(() => {
+      dispatch(fetchClientRequests(projectId));
+   })
 
+
+}
+
+console.log("REAQUESTS: ", requests)
   return (
-    <div>
+    <div >
       <ul>
-      <p style={{color: "red", fontSize: "16px"}}>{error}</p>
         {props.clientId === props.projectClientId
-          ? requests.map((request) => (
-              <div>
-                <Card>
+          ? 
+          requests.length < 1 ? "No requests yet for this project" :
+          requests.map((request) => (
+              <div key={request.id}
+              style={{ margin:"20px 20px",  ":hover": {boxShadow: 20}, overflow:"auto"}}
+              >
+                <Card
+                sx={{":hover": {boxShadow: 20}}}
+                >
                   <CardContent>
-                <h3> Project Request: </h3>
+                <h3> Project Request for: {request.project.title}</h3>
+                 <h4 style={{display: 'inline', right: "0px"}}>Unread<Switch checked={request.seenClient} onChange={()=>handleRead(request.projectId, request.seenClient, request.freelancer.id)} color="primary" >Read</Switch>Read</h4> 
                 <li key={request.id}>
-                  <p>Request Status: {request.status}</p>
+                  <p>Request Status: 
+                     <Typography variant="body2"  color="secondary">
+                <PendingTwoToneIcon fontSize="small"/>
+                   {request.status}
+                </Typography>
+                  </p>
                   <p>
-                    You have recieved a request from:{" "}
+                    You have received a request from:{" "}
                     <Link to={`/freelancers/${request.freelancer.id}`}>
                       {" "}
                       {request.freelancer.firstName}{" "}
                       {request.freelancer.lastName}
                     </Link>
+                    <hr></hr>
                   </p>
-                  <Typography gutterBottom variant="h5" component="div">
+                  <Typography gutterBottom variant="body2" >
                   {request.requestMessage}
                   </Typography>
                 </li>
-                <Button size="small" variant="contained" onClick={() => handleAssignUser(request.freelancer.id)}>
+              {request.project.freelancerId === null ?  <Button size="small" variant="contained" onClick={() => handleAssignUser(request.freelancer.id)}>
                   Assign {request.freelancer.firstName}{" "}
                   {request.freelancer.lastName} to Project
-                </Button>
+                </Button>: null}
                 {" "}
-                <Button size="small" variant="contained" onClick={() => handleUnassignUser(request.freelancer.id)}>
+               {request.project.freelancerId === request.freelancerId && projectStatus !== "Complete" ? <Button size="small" variant="contained" onClick={() => handleUnassignUser(request.freelancer.id)}>
                   Unassign {request.freelancer.firstName}{" "}
                   {request.freelancer.lastName} from Project
-                </Button>
+                </Button>: null}
                 </CardContent>
                 </Card>
               </div>

@@ -12,6 +12,7 @@ import AllClientProjects from '../features/projects/allClientProjects';
 import AllFreelancerProjects from '../features/projects/allFreelancerProjects';
 import ClientRequests from '../features/requests/ClientRequests'
 import FreelancerRequests from "../features/requests/FreelancerRequests"
+import MostReviewedFreelancers from '../features/freelancers/MostReviewedFreelancers'
 
 import { clientMe, freelancerMe } from './store';
 import Client from '../features/client/Client';
@@ -24,6 +25,7 @@ import UpdateClient from '../features/client/UpdateClient';
 import AboutUs from "../features/footer/AboutUs";
 import ContactUs from "../features/footer/ContactUs";
 
+import PageNotFound from '../features/PageNotFound';
 
 
 import AllMessages from '../features/messages/AllMessages';
@@ -35,6 +37,11 @@ import AddProject from "../features/projects/postProject";
 
 
 import AddRequest from "../features/requests/AddRequest";
+import ViewAllRatings from '../features/ratings/ViewAllRatings';
+import SubmitWork from '../features/projects/SubmitWork';
+import ReviewWork from '../features/projects/ReviewWork';
+import Work from '../features/projects/Work';
+
 
 /**
  * COMPONENT
@@ -59,8 +66,10 @@ const AppRoutes = () => {
     return (
       <div>
         <Routes>
-          <Route path="/*" element={<Home />} />
-          <Route to="/home" element={<Home />} />
+
+          <Route path="/" element={<Home />} />
+
+          <Route path="/home" element={<Home />} />
 
           <Route path="/projects" element={<AllProjects />} />
           <Route path="/projects/:projectId" element={<SingleProject />} />
@@ -73,10 +82,7 @@ const AppRoutes = () => {
             path="/projects/client/:clientId"
             element={<AllClientProjects />}
           />
-          <Route
-            path="/projects/freelancer/:freelancerId"
-            element={<AllFreelancerProjects />}
-          />
+  <Route path="/freelancers/most" element={<MostReviewedFreelancers />} />
 
           <Route path="/freelancers" element={<AllFreelancers />} />
           <Route path="/freelancers/:id" element={<SingleFreelancer />} />
@@ -88,7 +94,7 @@ const AppRoutes = () => {
           
 
           <Route path='profile/update' element={<UpdateClient />} />
-          <Route path='/post' element={<AddProject />} />
+  
 
           <Route path='/messages' element={<AllMessages />} />
           <Route path='/messages/:id' element={<IndividualMessagesClient/>} />
@@ -96,6 +102,19 @@ const AppRoutes = () => {
 
           <Route path="profile/update" element={<UpdateClient />} />
           <Route path="/post" element={<AddProject />} />
+
+          <Route path='/login' element={<Home />} />
+
+
+           {/* PAGE NOT FOUND */}
+           <Route path="*" element={<PageNotFound />} />
+
+
+
+          <Route path="/ratings/:freelancerId" element={<ViewAllRatings />} />
+          <Route path='/review/:id' element={<ReviewWork />} />
+          <Route path='/work/:id' element={<Work />} />
+
         </Routes>
       </div>
     );
@@ -105,24 +124,26 @@ const AppRoutes = () => {
     return (
       <div>
         <Routes>
-          <Route path="/*" element={<Home />} />
-          <Route to="/home" element={<Home />} />
+
+          <Route path="/" element={<Home />} />
+
+       
+
+          <Route path="/home" element={<Home />} />
 
           <Route path="/projects" element={<AllProjects />} />
           <Route path="/projects/:projectId" element={<SingleProject />} />
-
+          
           <Route
             path="/freelancer/:freelancerId/requests"
             element={<FreelancerRequests />}
           />
+            <Route path="/freelancers/most" element={<MostReviewedFreelancers />} />
           <Route
             path="/projects/:projectId/addrequest"
             element={<AddRequest />}
           />
-          <Route
-            path="/projects/client/:clientId"
-            element={<AllClientProjects />}
-          />
+
           <Route
             path="/projects/freelancer/:freelancerId"
             element={<AllFreelancerProjects />}
@@ -141,26 +162,31 @@ const AppRoutes = () => {
           <Route path='/messages/:id' element={<IndividualMessagesFreelancer/>} />
           <Route path="/client-profile/:id" element={<Client />} />
 
+
+          <Route path='/submit/:id' element={<SubmitWork />} />
+          <Route path='/work/:id' element={<Work />} />
+          <Route path='/login' element={<Home />} />
+          <Route path='/review/:id' element={<ReviewWork />} />
+
+           {/* PAGE NOT FOUND */}
+           <Route path="*" element={<PageNotFound />} />
+
+          <Route path="/ratings" element={<ViewAllRatings />} />
+
+
         </Routes>
       </div>
     )
   }else{
     return(
     <Routes>
-          <Route
-
-            path="/*"
-            element={<AuthForm name="login" displayName="Login" />}
-          />
-
-          {/* <Route path="/*" element={<Home />} />
-          <Route to="/home" element={<Home />} /> */}
-
-          <Route path="/*" element={<Home />} />
-
-          <Route to="/home" element={<Home />} />
 
 
+          <Route path="/" element={<Home />} />
+
+          <Route path="/home" element={<Home />} />
+          
+          <Route path="/freelancers/most" element={<MostReviewedFreelancers />} />
         <Route
           path="/login"
           element={<AuthForm name="login" displayName="Login" />}
@@ -169,28 +195,23 @@ const AppRoutes = () => {
 
         <Route path="/projects" element={<AllProjects />} />
         <Route path="/projects/:projectId" element={<SingleProject />} />
-        <Route
-          path="/projects/client/:clientId"
-          element={<AllClientProjects />}
-        />
-        <Route
-          path="/projects/freelancer/:freelancerId"
-          element={<AllFreelancerProjects />}
-        />
+
+ 
 
         <Route path="/contact" element={<ContactUs />}></Route>
         <Route path="/AboutUs" element={<AboutUs />}></Route>
 
-        {/* not logged in single Client view */}
-
-        {/* not logged in single Client view */}
+      
 
         <Route path="/client-profile/:id" element={<Client />} />
 
         <Route path="/freelancers" element={<AllFreelancers />} />
         <Route path="/freelancers/:id" element={<SingleFreelancer />} />
-        {/* not logged in single Client view */}
-        <Route path="/update-client" element={<UpdateClient />} />
+        
+
+           {/* PAGE NOT FOUND */}
+           <Route path="*" element={<PageNotFound />} />
+
       </Routes>
     );
   }

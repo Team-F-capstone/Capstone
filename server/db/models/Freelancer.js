@@ -15,22 +15,43 @@ const Freelancer = db.define("freelancer", {
     // allowNull: false,
 },
 imageUrl: {
-    type: Sequelize.STRING,
+    type: Sequelize.TEXT,
   },
   email: {
     type: Sequelize.STRING,
     // allowNull: false
   },
-  rating: {
+  ratingAvg: {
     type: Sequelize.FLOAT,
-    allowNull: true,
+    defaultValue: 5
+
   },
   description: {
     type: Sequelize.TEXT,
   },
-  categories: {
-    type: Sequelize.STRING,
-  },
+  category: {
+    type: Sequelize.ENUM(
+      ['Python Developer', 
+      'Javascript Developer',
+      'HTML & CSS Developer',
+      'Android Developer',
+      'iOS Developer'
+    ]),
+    defaultValue: 'Javascript Developer'
+    },
+    specialties:{
+      type: Sequelize.ENUM(
+        ['Web Application, Scripting, Bug Fixes, Help/Consultation', 
+        'Custom Websites using WordPress, Shopify, Wix, etc',
+        'Mobile Apps, Desktop Applications, Game Development',
+        'Website Development, Maitaince, and Customization',
+      ]),
+      defaultValue: 'Website Development, Maitaince, and Customization'
+      },
+      hourlyRate:{
+        type: Sequelize.INTEGER,
+        defaultValue: 20,
+      },
   username: {
     type: Sequelize.STRING,
     unique: true,
