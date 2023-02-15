@@ -68,13 +68,21 @@ li {
   flex-wrap: wrap;
   margin-top: 30px;
 }
-.card {
-  text-align: center;
-  margin: 10px;
+.singleProj {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
+  margin: 2rem;
+  text-align: center;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  margin: 2rem;
 }
 
 .editForm {
@@ -243,11 +251,12 @@ nav a:hover::before {
 #siteName {
   color: whitesmoke;
   text-align: center;
-  margin: 15px;
+  margin: 10px;
   font-size: 30px;
   text-transform: uppercase;
   font-family: "Playfair Display", serif;
   font-weight: 400;
+  width:400px;
 }
 
 li {
@@ -407,20 +416,22 @@ font-size: medium;
 
 .clientButtons>Button{
   width: 10vw;
+  height: 5vh;
 }
 
 .freelancerButtons{
   display: flex;
   flex-direction: row;
-  width: 30vw;
- justify-content: space-around;
+  width: 580px;
+ justify-content: space-between;
  align-items: center;
- gap: .5rem;
+
 }
 
-.freelancerButtons>Button{
+.fButton{
   width: 10vw;
   height: 5vh;
+
 }
 
 .backArrow{
