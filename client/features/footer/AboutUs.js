@@ -1,5 +1,6 @@
 import React from 'react'
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import GitHubIcon from '@mui/icons-material/GitHub';
 
 
 const aboutStyles = {
@@ -54,9 +55,11 @@ const AboutUs = () => {
         <div style={aboutStyles.column}>
             <div style={aboutStyles.card}>
             <div style={aboutStyles.container}>
-                <h2>Jesthine Disla</h2>
-                <p>Some text that describes me lorem ipsum ipsum lorem.</p>
-                <p>jesthine@capstone.com</p>
+                <h2>Jesthine Disla Vasquez</h2>
+                <p>Teacher turn coder, Jesthine Disla is a Software Developer who likes to create accessible and enriching solutions and apps. Feel free to reach out about Software Developing roles.</p>
+                <a href='https://www.linkedin.com/in/jesthine-disla/'><LinkedInIcon></LinkedInIcon></a>
+                {"   "}
+                <a href='https://github.com/JDVasquez26'><GitHubIcon ></GitHubIcon></a>
             </div>
             </div>
         </div>
@@ -65,8 +68,8 @@ const AboutUs = () => {
             <div style={aboutStyles.card}>
             <div style={aboutStyles.container}>
                 <h2>Michael Ryan</h2>
-                <p>Some text that describes me lorem ipsum ipsum lorem.</p>
-                <p>Michael@capstone.com</p>
+                <p>Michael is a Software Developer from Florida with a passion for using technology to solve problems and create innovative and user-friendy web applications.</p>
+                <a href="https://www.linkedin.com/in/mikegerardryan/"><LinkedInIcon></LinkedInIcon></a>
             </div>
             </div>
         </div>
@@ -75,7 +78,7 @@ const AboutUs = () => {
             <div style={aboutStyles.card}>
             <div style={aboutStyles.container}>
                 <h2>Patrick Kilcullen</h2>
-                <p>Some text that describes me lorem ipsum ipsum lorem.</p>
+                <p>Patrick is a fullstack software engineer from Chicago who gets excited about developing challenging apps that improve peoples lives.</p>
                 <p>patrick@scapstone.com</p>
             </div>
             </div>

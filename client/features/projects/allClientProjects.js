@@ -167,8 +167,11 @@ const seen = requests.filter((request)=>{
 </Box>
 
 {/* && NEEDED???? */}
-<p>{seenRequests && !seen ? null :
-    
+<p>{seenRequests && seen ? null : <Typography fontFamily={"Playfair Display serif"} variant="h7" component="div">
+                              You have unread proposals for the following projects :
+                            </Typography>}</p>
+<p>{seenRequests && seen ? null :
+  
     seen.map((request)=>{
 
 let message = request[0].requestMessage
@@ -177,10 +180,19 @@ let reqs =  projects.filter((project)=>{
 }) 
 // "/projects/:projectId/requests"
 return reqs.map((proj)=>{
-  return <Button size="small" color="secondary" variant="contained" sx={{ padding: 0.5, margin: 1.5,  }} >
+
+  return <div>
+      {/* <Typography variant="h6" color='secondary'>
+            
+            {message}
+            </Typography> */}
+            
+   <Button size="small" color="secondary" variant="contained" sx={{ padding: 0.5, margin: 1.5,  }} >
     <Link to={`/projects/${proj.id}/requests`} >{proj.title} </Link> 
+    
    {/* <Link to={`/projects/${proj.id}`}> {proj.title}</Link>  */}
    </Button>
+   </div>
 })
 
 
@@ -202,7 +214,15 @@ return reqs.map((proj)=>{
             <TabPanel value={value} index={0}>
 
                 {pend ? 
-            <div className="allList">
+            <div
+            style={{
+              width: 600,
+              height:500,
+              alignContent:"center",
+              boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
+              overflow:"auto",
+            }}
+            >
 
                 {projects
                   .filter((project) => {
@@ -269,7 +289,15 @@ return reqs.map((proj)=>{
             </TabPanel>
             <TabPanel value={value} index={1}>
               {ongo ? 
-              <div className="allList">
+              <div
+              style={{
+                width: 600,
+                height:500,
+                alignContent:"center",
+                boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
+                overflow:"auto",
+              }}
+              >
 
 
               {projects
@@ -345,7 +373,15 @@ return reqs.map((proj)=>{
             </TabPanel>
             <TabPanel value={value} index={2}>
               {comp ? 
-              <div className="allList">
+              <div 
+              style={{
+                width: 600,
+                height:500,
+                alignContent:"center",
+                boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
+                overflow:"auto",
+              }}
+              >
               
               {projects
                 .filter((project) => {

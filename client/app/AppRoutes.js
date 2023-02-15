@@ -43,6 +43,12 @@ import ReviewWork from '../features/projects/ReviewWork';
 import Work from '../features/projects/Work';
 
 
+import SingleRequest from '../features/requests/SingleRequest';
+
+
+
+
+
 /**
  * COMPONENT
  */
@@ -82,6 +88,7 @@ const AppRoutes = () => {
             path="/projects/client/:clientId"
             element={<AllClientProjects />}
           />
+          
   <Route path="/freelancers/most" element={<MostReviewedFreelancers />} />
 
           <Route path="/freelancers" element={<AllFreelancers />} />
@@ -95,7 +102,7 @@ const AppRoutes = () => {
 
           <Route path='profile/update' element={<UpdateClient />} />
   
-
+          <Route path='requests/:requestId' element={<SingleRequest />} />
           <Route path='/messages' element={<AllMessages />} />
           <Route path='/messages/:id' element={<IndividualMessagesClient/>} />
 
@@ -162,6 +169,9 @@ const AppRoutes = () => {
           <Route path='/messages/:id' element={<IndividualMessagesFreelancer/>} />
           <Route path="/client-profile/:id" element={<Client />} />
 
+
+          {/* <Route path='/:clientId/requests/' element={<ClientRequest />} /> */}
+          <Route path='requests/:requestId' element={<SingleRequest />} />
 
           <Route path='/submit/:id' element={<SubmitWork />} />
           <Route path='/work/:id' element={<Work />} />

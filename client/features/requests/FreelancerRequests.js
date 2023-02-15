@@ -83,6 +83,7 @@ export default function FreelancerRequests(props) {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
+        
       }}
     >
       <Typography
@@ -92,7 +93,7 @@ export default function FreelancerRequests(props) {
         marginBottom={3}
         variant="h4"
       >
-        Pending Proposals
+        Proposals
       </Typography>
       <div className="allList">
         {id.toString()
@@ -102,7 +103,8 @@ export default function FreelancerRequests(props) {
                   sx={{
                     minWidth: 200,
                     height: 200,
-
+                    backgroundColor: "#F5F5F5",
+                    boxShadow: "1px 3px 3px 1px",
                     margin: "0 auto",
                     padding: "1em",
                     ":hover": { boxShadow: 20 },
@@ -123,7 +125,7 @@ export default function FreelancerRequests(props) {
                   <br></br>
                   <Typography component="div" variant="body2">
                     {" "}
-                    Request Status: 
+                    Proposal Status: 
                   </Typography>
                   <Typography variant="body2" align="center" color="secondary">
                 <PendingTwoToneIcon fontSize="small"/>
@@ -136,7 +138,7 @@ export default function FreelancerRequests(props) {
                     variant="contained"
                     onClick={() => handleDeleteRequest(request.project.id)}
                   >
-                    Delete proposal
+                    Delete Proposal
                   </Button>
                 </Card>{" "}
               </div>
